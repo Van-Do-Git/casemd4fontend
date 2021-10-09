@@ -174,11 +174,11 @@
             document.getElementById("page").value = data.number + 1;
             $('#continueshow').remove();
             for (let i = 0; i < data.content.length; i++) {
-                console.log(data.content[i].content);
                 let tabe = '<table><tr><td></td><td><p>' + data.content[i].likeList.length + '</p></td><td></td><td> <p>' + data.content[i].commentList.length + '</p></td></tr></table>'
                 resulf += '<div id="post' + data.content[i].id + '">' +
                     '<p>' + data.content[i].account.fullName + '</p>' +
                     '<p>' + data.content[i].privacy + '</p>' +
+                    '<p>' + data.content[i].conten + '</p>' +
                     '<p><img width="560px" height="auto" src=' + data.content[i].imageList[0].path + '/></p>' +
                     '<table><tr><td><p>' + data.content[i].likeList.length + '</p></td><td>Like</td><td> <p>' + data.content[i].commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
                     '<button type="button" onclick="createLike(' + data.content[i].id + ')"> Like </button>' +
@@ -258,6 +258,7 @@
             success: function (data) {
                 let result = '<p>' + data.account.fullName + '</p>' +
                     '<p>' + data.privacy + '</p>' +
+                    '<p>' + data.conten + '</p>'+
                     '<p><img width="560px" height="auto" src=' + data.imageList[0].path + '/></p>' +
                     '<table><tr><td><p>' + data.likeList.length + '</p></td><td>Like</td><td><p>' + data.commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
                     '<button type="button" onclick="createLike(' + data.id + ')"> Like </button>' +
@@ -345,7 +346,7 @@
         let timePost = new Date();
         let img = $('#image').val();
         let account = {id: window.sessionStorage.getItem('ID_KEY')}
-        let post = {content: content, privacy: privacy, timePost: timePost, account: account}
+        let post = {conten: content, privacy: privacy, timePost: timePost, account: account}
         let image = {path: img, post: post}
 
         $.ajax({
