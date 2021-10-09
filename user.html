@@ -10,12 +10,16 @@
             width: 1000px;
             height: 500px;
             margin: auto;
+
         }
 
         #header {
             width: 1000px;
             height: 20%;
             background-color: #2bb3c0;
+            position: fixed;
+            clear: both;
+            top: 0px;
         }
 
         #friend {
@@ -23,14 +27,19 @@
             width: 180px;
             background-color: #999999;
             float: left;
+            position: fixed;
+            top: 21%;
+            left: 171px;
         }
 
         #timeline {
+            margin-top: 20%;
             padding: 20px;
             height: 100%;
             width: 600px;
-            background-color: gainsboro;
             float: left;
+            position: absolute;
+            left: 350px;
         }
 
         #alert {
@@ -38,6 +47,9 @@
             width: 180px;
             background-color: #999999;
             float: left;
+            position: fixed;
+            top: 21%;
+            right: 170px;
         }
     </style>
 </head>
@@ -59,12 +71,6 @@
                 </td>
             </tr>
         </table>
-
-    </div>
-    <div id="friend">
-
-    </div>
-    <div id="timeline">
         <div id="posts">
             <div id="uploadfile"></div>
             <input id="content" type="text" placeholder="Bạn đang nghĩ gì?">
@@ -77,6 +83,12 @@
             <input type="hidden" id="image">
             <button onclick="post()">post</button>
         </div>
+
+    </div>
+    <div id="friend">
+
+    </div>
+    <div id="timeline">
         <input type="hidden" id="page" value=0>
     </div>
     <div id="alert">
@@ -163,12 +175,12 @@
             $('#continueshow').remove();
             for (let i = 0; i < data.content.length; i++) {
                 console.log(data.content[i].content);
+                let tabe = '<table><tr><td></td><td><p>' + data.content[i].likeList.length + '</p></td><td></td><td> <p>' + data.content[i].commentList.length + '</p></td></tr></table>'
                 resulf += '<div id="post' + data.content[i].id + '">' +
                     '<p>' + data.content[i].account.fullName + '</p>' +
                     '<p>' + data.content[i].privacy + '</p>' +
-                    '<p><img width="50px" height="50px" src=' + data.content[i].imageList[0].path + '/></p>' +
-                    '<p>' + data.content[i].likeList.length + '</p>' +
-                    '<p>' + data.content[i].commentList.length + '</p>' +
+                    '<p><img width="560px" height="auto" src=' + data.content[i].imageList[0].path + '/></p>' +
+                    '<table><tr><td><p>' + data.content[i].likeList.length + '</p></td><td>Like</td><td> <p>' + data.content[i].commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
                     '<button type="button" onclick="createLike(' + data.content[i].id + ')"> Like </button>' +
                     '<input type="text" id="comment' + data.content[i].id + '"/>' +
                     '<button type="button" onclick="createCm(' + data.content[i].id + ')"> Bình luận </button>';
@@ -176,7 +188,7 @@
                     resulf += '<p>' + data.content[i].commentList[j].account.fullName + '</p>' +
                         '<p>' + data.content[i].commentList[j].content + '</p>';
                     if (data.content[i].commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
-                        resulf += '<button type="button" onclick="deleteComment(' + data.content[i].commentList[j].id + ')"> Xóa </button>';
+                        resulf += '<button type="button" onclick="deleteComment(' + data.content[i].commentList[j].id + ',' + data.content[i].id + ')"> Xóa </button>';
                     }
                 }
                 resulf += '</div>';
@@ -194,7 +206,7 @@
         getListPost();
     }
 
-    function deleteComment(idComment) {
+    function deleteComment(idComment, idPost) {
         $.ajax({
             url: 'http://localhost:8080/user/deletecomment/' + idComment,
             method: 'GET',
@@ -204,10 +216,10 @@
                 'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
             },
             success: function () {
-                location.reload(true);
+                showRePost(idPost);
             },
             error: function () {
-                location.reload(true);
+                showRePost(idPost);
             }
         })
         event.preventDefault();
@@ -225,13 +237,42 @@
             },
             dataType: 'json',
             success: function () {
-                location.reload(true)
+                showRePost(idPost);
             },
             error: function () {
-                location.reload(true);
+                showRePost(idPost);
             }
         })
         event.preventDefault();
+    }
+
+    function showRePost(idPost) {
+        $.ajax({
+            url: 'http://localhost:8080/user/findPost/' + idPost,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
+            },
+            success: function (data) {
+                let result = '<p>' + data.account.fullName + '</p>' +
+                    '<p>' + data.privacy + '</p>' +
+                    '<p><img width="560px" height="auto" src=' + data.imageList[0].path + '/></p>' +
+                    '<table><tr><td><p>' + data.likeList.length + '</p></td><td>Like</td><td><p>' + data.commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
+                    '<button type="button" onclick="createLike(' + data.id + ')"> Like </button>' +
+                    '<input type="text" id="comment' + data.id + '"/>' +
+                    '<button type="button" onclick="createCm(' + data.id + ')"> Bình luận </button>';
+                for (let j = 0; j < data.commentList.length; j++) {
+                    result += '<p>' + data.commentList[j].account.fullName + '</p>' +
+                        '<p>' + data.commentList[j].content + '</p>';
+                    if (data.commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
+                        result += '<button type="button" onclick="deleteComment(' + data.commentList[j].id + ',' + data.id + ')"> Xóa </button>';
+                    }
+                }
+                document.getElementById("post" + idPost).innerHTML = result;
+            }
+        })
     }
 
     function createCm(idPost) {
@@ -248,10 +289,10 @@
             },
             data: JSON.stringify(comment),
             success: function () {
-                location.reload(true)
+                showRePost(idPost);
             },
             error: function () {
-                location.reload(true);
+                showRePost(idPost);
             }
         })
     }
