@@ -7,29 +7,25 @@
     <title>Title</title>
     <style>
         #wraper {
-            width: 1000px;
-            height: 500px;
-            margin: auto;
 
         }
 
         #header {
-            width: 1000px;
+            width: 100%;
             height: 20%;
             background-color: #2bb3c0;
             position: fixed;
-            clear: both;
             top: 0px;
+            left: 0;
         }
 
         #friend {
             height: 100%;
-            width: 180px;
+            width: 20%;
             background-color: #999999;
-            float: left;
             position: fixed;
-            top: 21%;
-            left: 171px;
+            top: 20%;
+            left: 0px;
         }
 
         #timeline {
@@ -37,25 +33,33 @@
             padding: 20px;
             height: 100%;
             width: 600px;
-            float: left;
             position: absolute;
             left: 350px;
         }
 
         #alert {
             height: 100%;
-            width: 180px;
+            width: 20%;
             background-color: #999999;
-            float: left;
             position: fixed;
-            top: 21%;
-            right: 170px;
+            top: 20%;
+            right: 0px;
         }
     </style>
 </head>
 <body>
 <div id="wraper">
     <div id="header">
+        <table>
+            <tr>
+                <td>
+                    <div id="avatarUser"></div>
+                </td>
+                <td>
+                    <div id="nameUser"></div>
+                </td>
+            </tr>
+        </table>
         <table>
             <tr>
                 <td>
@@ -71,34 +75,123 @@
                 </td>
             </tr>
         </table>
-        <div id="posts">
-            <div id="uploadfile"></div>
-            <input id="content" type="text" placeholder="Bạn đang nghĩ gì?">
-            <select name="" id="privacy">
-                <option value="onlyme">only me</option>
-                <option value="friend">friend</option>
-                <option value="public">public</option>
-            </select>
-            <input type="file" value="upload" accept=".jpg" id="fileButton">
-            <input type="hidden" id="image">
-            <button onclick="post()">post</button>
-        </div>
-
+        <button onclick="logout()" type="button">Đăng xuất</button>
     </div>
+
     <div id="friend">
 
     </div>
     <div id="timeline">
+        <div id="posts">
+            <div id="uploadfile"></div>
+            <input id="content" type="text" placeholder="Bạn đang nghĩ gì?">
+            <select name="" id="privacy">
+                <option value="public">only me</option>
+                <option value="friend">friend</option>
+                <option value="onlyme">public</option>
+            </select>
+            <input type="file" value="upload" accept=".jpg" id="fileButton">
+            <input type="hidden" id="image">
+            <button onclick="post()">Đăng bài</button>
+        </div>
         <input type="hidden" id="page" value=0>
     </div>
     <div id="alert">
 
     </div>
+
 </div>
 <script>
     $(document).ready(function () {
         getListPost();
+        showUser();
+        showListFriend();
+        showListAddFriend();
     })
+
+    function showListAddFriend() {
+        let idAcc = window.sessionStorage.getItem('ID_KEY');
+        $.ajax({
+            url: 'http://localhost:8080/user/showrequestfriend/' + idAcc,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
+            },
+            success: function (data) {
+                console.log(data)
+                let result = "<table>";
+                for (let i = 0; i < data.length; i++) {
+                    result +=
+                        '<tr>' +
+                        '<td><img width="50px" height="50px" src=' + data[i].avatar.path + '/></td>' +
+                        '<td><p>' + data[i].fullName + '</p></td>' +
+                        '<td><button type="button" onclick="confirmFriend(' + data[i].id + ')"> Đồng ý </button></td>' +
+                        '</tr>';
+                }
+                result += "</table>";
+                document.getElementById('alert').innerHTML = result;
+            },
+            error: function () {
+                document.getElementById('alert').innerHTML = "";
+            }
+        })
+        event.preventDefault();
+    }
+
+    function confirmFriend(idFriend) {
+
+    }
+
+    function showListFriend() {
+        let idAcc = window.sessionStorage.getItem('ID_KEY');
+        $.ajax({
+            url: 'http://localhost:8080/user/showfriend/' + idAcc,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
+            },
+            success: function (data) {
+                console.log(data)
+                let result = "<table>";
+                for (let i = 0; i < data.length; i++) {
+                    result +=
+                        '<tr>' +
+                        '<td><img width="50px" height="50px" src=' + data[i].avatar.path + '/></td>' +
+                        '<td><p>' + data[i].fullName + '</p></td>' +
+                        '<td><button type="button"  onclick="showFriendDetail(' + data[i].id + ')"> Vào xem </button></td>' +
+                        '</tr>';
+                }
+                result += "</table>";
+                document.getElementById('friend').innerHTML = result;
+            },
+            error: function () {
+                document.getElementById('friend').innerHTML = "";
+            }
+        })
+        event.preventDefault();
+    }
+
+    function showFriendDetail(idFriend) {
+    };
+
+    function showUser() {
+        let image = '<img width="60px" height="auto" src=' + window.sessionStorage.getItem('AVATAR_KEY') + '/>';
+        let fullname = window.sessionStorage.getItem('FULLNAME_KEY')
+        document.getElementById('avatarUser').innerHTML = image;
+        document.getElementById('nameUser').innerText = fullname;
+    }
+
+    function logout() {
+        window.sessionStorage.removeItem('TOKEN_KEY');
+        window.sessionStorage.removeItem('ID_KEY');
+        window.sessionStorage.removeItem('FULLNAME_KEY');
+        window.sessionStorage.removeItem('AVATAR_KEY');
+        window.location.assign('login.html');
+    }
 
     function searchFriend() {
         let email = $('#email').val();
@@ -118,9 +211,8 @@
                     '<table><tr>' +
                     '<td><img width="50px" height="50px" src=' + data.avatar.path + '/></td>' +
                     '<td><p>' + data.fullName + '</p></td>' +
-                    '<td><button type="button"  id="continueshow" onclick="addFriend(' + data.id + ')"> Gửi kết bạn </button></td>' +
+                    '<td><button type="button"  onclick="addFriend(' + data.id + ')"> Gửi kết bạn </button></td>' +
                     '</tr></table>';
-
                 document.getElementById('refriend').innerHTML = result;
             },
             error: function () {
@@ -174,11 +266,23 @@
             document.getElementById("page").value = data.number + 1;
             $('#continueshow').remove();
             for (let i = 0; i < data.content.length; i++) {
-                let tabe = '<table><tr><td></td><td><p>' + data.content[i].likeList.length + '</p></td><td></td><td> <p>' + data.content[i].commentList.length + '</p></td></tr></table>'
-                resulf += '<div id="post' + data.content[i].id + '">' +
-                    '<p>' + data.content[i].account.fullName + '</p>' +
-                    '<p>' + data.content[i].privacy + '</p>' +
-                    '<p>' + data.content[i].conten + '</p>' +
+                resulf += '<div id="post' + data.content[i].id + '">';
+                if (data.content[i].account.id == window.sessionStorage.getItem('ID_KEY')) {
+                    resulf +=
+                        '<table><tr style="width: 450px">' +
+                        '<td>' + data.content[i].account.fullName + '</td>' +
+                        '<td>     Trạng thái:' + data.content[i].privacy + '</td>' +
+                        '<td><button type="button" onclick="editPost(' + data.content[i].id + ')"> Sửa </button></td>' +
+                        '<td><button type="button" onclick="deletePost(' + data.content[i].id + ')"> Xóa </button></td>' +
+                        '</tr></table>';
+                } else {
+                    resulf +=
+                        '<table><tr style="width: 450px">' +
+                        '<td>' + data.content[i].account.fullName + '</td>' +
+                        '<td>     Trạng thái:' + data.content[i].privacy + '</td>' +
+                        '</tr></table>';
+                }
+                resulf += '<p>' + data.content[i].conten + '</p>' +
                     '<p><img width="560px" height="auto" src=' + data.content[i].imageList[0].path + '/></p>' +
                     '<table><tr><td><p>' + data.content[i].likeList.length + '</p></td><td>Like</td><td> <p>' + data.content[i].commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
                     '<button type="button" onclick="createLike(' + data.content[i].id + ')"> Like </button>' +
@@ -193,7 +297,9 @@
                 }
                 resulf += '</div>';
             }
-            resulf += '<button type="button"  id="continueshow" onclick="continuePost()"> Xem Thêm </button>';
+            if (!data.last) {
+                resulf += '<button type="button"  id="continueshow" onclick="continuePost()"> Xem Thêm </button>';
+            }
         }
 
         let divLocation = document.getElementById("timeline");
@@ -256,9 +362,25 @@
                 'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
             },
             success: function (data) {
-                let result = '<p>' + data.account.fullName + '</p>' +
-                    '<p>' + data.privacy + '</p>' +
-                    '<p>' + data.conten + '</p>'+
+                let result = "";
+                if (data.account.id == window.sessionStorage.getItem('ID_KEY')) {
+                    result +=
+                        '<table><tr style="width: 450px">' +
+                        '<td>' + data.account.fullName + '</td>' +
+                        '<td>     Trạng thái:' + data.privacy + '</td>' +
+                        '<td><button type="button" onclick="editPost(' + data.id + ')"> Sửa </button></td>' +
+                        '<td><button type="button" onclick="deletePost(' + data.id + ')"> Xóa </button></td>' +
+                        '</tr></table>';
+                } else {
+                    result +=
+                        '<table><tr style="width: 450px">' +
+                        '<td>' + data.account.fullName + '</td>' +
+                        '<td>     Trạng thái:' + data.privacy + '</td>' +
+                        '</tr></table>';
+                }
+
+                result +=
+                    '<p>' + data.conten + '</p>' +
                     '<p><img width="560px" height="auto" src=' + data.imageList[0].path + '/></p>' +
                     '<table><tr><td><p>' + data.likeList.length + '</p></td><td>Like</td><td><p>' + data.commentList.length + '</p></td><td>Bình luận</td></tr></table>' +
                     '<button type="button" onclick="createLike(' + data.id + ')"> Like </button>' +
