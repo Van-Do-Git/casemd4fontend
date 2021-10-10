@@ -98,11 +98,12 @@
         <input type="hidden" id="page" value=0>
         <div id="posts">
             <div id="uploadfile"></div>
+            <input type="hidden" id="idPost">
             <input id="content" type="text" placeholder="Bạn đang nghĩ gì?">
             <select name="" id="privacy">
-                <option value="public">onlyme</option>
-                <option value="friend">friend</option>
-                <option value="onlyme">public</option>
+                <option value="public">Public</option>
+                <option value="friend">Friend</option>
+                <option value="onlyme">Onlyme</option>
             </select>
             <input type="file" value="upload" accept=".jpg" id="fileButton">
             <input type="hidden" id="image">
@@ -181,6 +182,28 @@
             },
             error: function () {
                 document.getElementById("listpost").innerHTML = "";
+            }
+        })
+        event.preventDefault();
+    }
+
+    function editPost(idPost) {
+    }
+
+    function deletePost(idPost) {
+        $.ajax({
+            url: 'http://localhost:8080/user/deletepost/' + idPost,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
+            },
+            success: function () {
+                homepage();
+            },
+            error: function () {
+                homepage();
             }
         })
         event.preventDefault();
@@ -672,6 +695,7 @@
     });
 
     function post() {
+        let idPost = $('#idPost').val();
         let content = $('#content').val();
         let privacy = $('#privacy').val();
         let timePost = new Date();
@@ -698,6 +722,7 @@
                 document.getElementById("image").value = "";
                 window.location.reload();
             }
+
         })
         event.preventDefault();
     }
