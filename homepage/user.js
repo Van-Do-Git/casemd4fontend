@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    if(window.sessionStorage.getItem('ID_KEY')==""){
+    console.log(window.sessionStorage.getItem('ID_KEY'))
+    if(window.sessionStorage.getItem('ID_KEY')==null){
         window.location.assign("../index.html");
     }
     getListPost();
