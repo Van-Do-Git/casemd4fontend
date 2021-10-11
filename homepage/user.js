@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    if(window.sessionStorage.getItem('ID_KEY')==""){
+        window.location.assign("../index.html");
+    }
     getListPost();
     showUser();
     showListFriend();
@@ -286,7 +289,7 @@ function logout() {
     window.sessionStorage.removeItem('ID_KEY');
     window.sessionStorage.removeItem('FULLNAME_KEY');
     window.sessionStorage.removeItem('AVATAR_KEY');
-    window.location.href = "login.html";
+    window.location.href = "../index.html";
     event.preventDefault();
 }
 
@@ -535,6 +538,12 @@ function createCm(idPost) {
             showRePost(idPost);
         }
     })
+}
+let list = [];
+function themvaogiohang(idProdc){
+    let produc = {id:idProdc};
+    list.push(produc);
+    localStorage.setItem("lístt",JSON.stringify(list));
 }
 
 function post() {
