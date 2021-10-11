@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log(window.sessionStorage.getItem('ID_KEY'))
     if(window.sessionStorage.getItem('ID_KEY')==null){
         window.location.assign("../index.html");
     }
