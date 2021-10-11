@@ -58,9 +58,9 @@ function showUserDetail() {
                         '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data[i].id + ')"> Bình luận </button>';
                     for (let j = 0; j < data[i].commentList.length; j++) {
                         if (data[i].commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
-                            resulf += '<p>' + data[i].commentList[j].account.fullName + '<button type="button" class="btn btn-outline-info" onclick="deleteComment(' + data[i].commentList[j].id + ',' + data[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
+                            resulf += '<p style="color: blue;font-size: 15px">' + data[i].commentList[j].account.fullName + '<button type="button" class="btn btn-outline-info" onclick="deleteComment(' + data[i].commentList[j].id + ',' + data[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
                         } else {
-                            resulf += '<p>' + data[i].commentList[j].account.fullName + '</p>';
+                            resulf += '<p style="color: blue;font-size: 15px">' + data[i].commentList[j].account.fullName + '</p>';
 
                         }
                         resulf += '<p>' + data[i].commentList[j].content + '</p>';
@@ -256,9 +256,9 @@ function showFriendDetail(idFriend) {
                         '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data[i].id + ')"> Bình luận </button>';
                     for (let j = 0; j < data[i].commentList.length; j++) {
                         if (data[i].commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
-                            resulf += '<p>' + data[i].commentList[j].account.fullName + '<button class="btn btn-outline-info" onclick="deleteComment(' + data[i].commentList[j].id + ',' + data[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
+                            resulf += '<p style="color: blue;font-size: 15px">' + data[i].commentList[j].account.fullName + '<button class="btn btn-outline-info" onclick="deleteComment(' + data[i].commentList[j].id + ',' + data[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
                         } else {
-                            resulf += '<p>' + data[i].commentList[j].account.fullName + '</p>';
+                            resulf += '<p style="color: blue;font-size: 15px">' + data[i].commentList[j].account.fullName + '</p>';
 
                         }
                         resulf += '<p>' + data[i].commentList[j].content + '</p>';
@@ -400,9 +400,9 @@ function showPost(data) {
                 '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data.content[i].id + ')"> Bình luận </button>';
             for (let j = 0; j < data.content[i].commentList.length; j++) {
                 if (data.content[i].commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
-                    resulf += '<p>' + data.content[i].commentList[j].account.fullName + '<button class="btn btn-outline-info" onclick="deleteComment(' + data.content[i].commentList[j].id + ',' + data.content[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
+                    resulf += '<p style="color: blue;font-size: 15px">' + data.content[i].commentList[j].account.fullName + '<button class="btn btn-outline-info" onclick="deleteComment(' + data.content[i].commentList[j].id + ',' + data.content[i].id + ')"> <i class="fas fa-trash"></i> </button></p>';
                 } else {
-                    resulf += '<p>' + data.content[i].commentList[j].account.fullName + '</p>';
+                    resulf += '<p style="color: blue;font-size: 15px">' + data.content[i].commentList[j].account.fullName + '</p>';
 
                 }
                 resulf += '<p>' + data.content[i].commentList[j].content + '</p>';
