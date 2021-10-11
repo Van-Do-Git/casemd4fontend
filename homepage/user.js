@@ -16,7 +16,7 @@ function showUserDetail() {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $('#posts').show();
     $.ajax({
-        url: 'http://localhost:8080/user/showuserdetail/' + idAcc,
+        url: 'https://vilo-vn.herokuapp.com/user/showuserdetail/' + idAcc,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -80,7 +80,7 @@ function editPost(idPost) {
 
 function deletePost(idPost) {
     $.ajax({
-        url: 'http://localhost:8080/user/deletepost/' + idPost,
+        url: 'https://vilo-vn.herokuapp.com/user/deletepost/' + idPost,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -108,7 +108,7 @@ function homepage() {
 function showListAddFriend() {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/showrequestfriend/' + idAcc,
+        url: 'https://vilo-vn.herokuapp.com/user/showrequestfriend/' + idAcc,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -141,7 +141,7 @@ function showListAddFriend() {
 function refuseFriend(idFriend) {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/refuse/' + idAcc + '/' + idFriend,
+        url: 'https://vilo-vn.herokuapp.com/user/refuse/' + idAcc + '/' + idFriend,
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
@@ -161,7 +161,7 @@ function refuseFriend(idFriend) {
 function confirmFriend(idFriend) {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/confirmfriend/' + idAcc + '/' + idFriend,
+        url: 'https://vilo-vn.herokuapp.com/user/confirmfriend/' + idAcc + '/' + idFriend,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -183,7 +183,7 @@ function confirmFriend(idFriend) {
 function showListFriend() {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/showfriend/' + idAcc,
+        url: 'https://vilo-vn.herokuapp.com/user/showfriend/' + idAcc,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -213,7 +213,7 @@ function showListFriend() {
 function showFriendDetail(idFriend) {
     $('#posts').hide();
     $.ajax({
-        url: 'http://localhost:8080/user/showpostfriend/' + idFriend,
+        url: 'https://vilo-vn.herokuapp.com/user/showpostfriend/' + idFriend,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -301,7 +301,7 @@ function searchFriend() {
         },
         data: JSON.stringify(account),
         type: "POST",
-        url: 'http://localhost:8080/user/searchfriend',
+        url: 'https://vilo-vn.herokuapp.com/user/searchfriend',
         success: function (data) {
             console.log(data)
             let result = ""
@@ -328,7 +328,7 @@ function searchFriend() {
 function addFriend(idFriend) {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/sendaddfriend/' + idAcc + '/' + idFriend,
+        url: 'https://vilo-vn.herokuapp.com/user/sendaddfriend/' + idAcc + '/' + idFriend,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -355,7 +355,7 @@ function getListPost() {
         },
         data: page,
         type: "POST",
-        url: 'http://localhost:8080/user/timeline',
+        url: 'https://vilo-vn.herokuapp.com/user/timeline',
         success: function (data) {
             showPost(data);
         }
@@ -423,7 +423,7 @@ function continuePost() {
 
 function deleteComment(idComment, idPost) {
     $.ajax({
-        url: 'http://localhost:8080/user/deletecomment/' + idComment,
+        url: 'https://vilo-vn.herokuapp.com/user/deletecomment/' + idComment,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -443,7 +443,7 @@ function deleteComment(idComment, idPost) {
 function createLike(idPost) {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     $.ajax({
-        url: 'http://localhost:8080/user/likeshow/' + idAcc + '/' + idPost,
+        url: 'https://vilo-vn.herokuapp.com/user/likeshow/' + idAcc + '/' + idPost,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -463,7 +463,7 @@ function createLike(idPost) {
 
 function showRePost(idPost) {
     $.ajax({
-        url: 'http://localhost:8080/user/findPost/' + idPost,
+        url: 'https://vilo-vn.herokuapp.com/user/findPost/' + idPost,
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -520,7 +520,7 @@ function createCm(idPost) {
     }
     let comment = {content: contentNew};
     $.ajax({
-        url: 'http://localhost:8080/user/comment/' + idAcc + '/' + idPost,
+        url: 'https://vilo-vn.herokuapp.com/user/comment/' + idAcc + '/' + idPost,
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -559,7 +559,7 @@ function post() {
         type: "POST",
         data: JSON.stringify(image),
         //tên API
-        url: "http://localhost:8080/user/createPost",
+        url: "https://vilo-vn.herokuapp.com/user/createPost",
         //xử lý khi thành công
         success: function (data) {
             document.getElementById("uploadfile").value = "";

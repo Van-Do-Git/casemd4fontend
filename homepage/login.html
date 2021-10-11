@@ -107,7 +107,7 @@
     console.log(email);
     let account = {email: email, password: password};
     $.ajax({
-      url: 'http://localhost:8080/account/login',
+      url: 'https://vilo-vn.herokuapp.com/account/login',
       method: 'POST',
       data: JSON.stringify(account),
       contentType: 'application/json; charset=utf8',

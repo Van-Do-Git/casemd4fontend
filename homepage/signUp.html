@@ -146,7 +146,7 @@
             fullName: fullName, dateOfBirth: dateOfBirth, address: address
         };
         $.ajax({
-            url: 'http://localhost:8080/account/signup',
+            url: 'https://vilo-vn.herokuapp.com/account/signup',
             method: 'POST',
             data: JSON.stringify(account),
             contentType: 'application/json; charset=utf8',
