@@ -14,6 +14,7 @@ $(document).ready(function () {
 
 function showUserDetail() {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
+    $('#posts').show();
     $.ajax({
         url: 'http://localhost:8080/user/showuserdetail/' + idAcc,
         method: 'GET',
@@ -42,9 +43,13 @@ function showUserDetail() {
                             '<td>&nbsp;&nbsp;&nbsp;&nbsp;Trạng thái:' + data[i].privacy + '</td>' +
                             '</tr></table>';
                     }
-                    resulf += '<p>' + data[i].conten + '</p>' +
-                        '<p><img width="500px" height="auto" src=' + data[i].imageList[0].path + '/></p>' +
-                        '<p>' + data[i].likeList.length + ' <i class="fas fa-heart"></i> &nbsp;&nbsp;' + data[i].commentList.length + ' Bình luận</p>' +
+                    resulf +=
+                        '<p>' + data[i].conten + '</p>';
+                    if (data[i].imageList[0].path != "") {
+                        resulf += '<p><img width="500px" height="auto" src=' + data[i].imageList[0].path + '/></p>';
+                    }
+                    resulf +=
+                        '<p>' + data[i].likeList.length + ' <i class="fas fa-heart" style="color: lime"></i> &nbsp;&nbsp;' + data[i].commentList.length + ' Bình luận</p>' +
                         '<button type="button" class="btn btn-danger" onclick="createLike(' + data[i].id + ')"> Like </button>' +
                         '<input style="width: 350px;height: 38px" type="text" id="comment' + data[i].id + '"/>' +
                         '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data[i].id + ')"> Bình luận </button>';
@@ -118,8 +123,8 @@ function showListAddFriend() {
                     '<td><img width="50px" height="50px" src=' + data[i].avatar.path + '/></td>' +
                     '<td><p>' + data[i].fullName + '</p></td>'
                     + '</tr><tr>' +
-                    '<td><button type="button" onclick="confirmFriend(' + data[i].id + ')">Đồng ý</button></td>' +
-                    '<td><button type="button" onclick="refuseFriend(' + data[i].id + ')">Từ chối</button></td>' +
+                    '<td><button style="width: 65px;font-size: 12px" type="button" class="btn btn-outline-primary" onclick="confirmFriend(' + data[i].id + ')">Đồng ý</button></td>' +
+                    '<td><button style="width: 65px;font-size: 12px" type="button" class="btn btn-outline-danger" onclick="refuseFriend(' + data[i].id + ')">Từ chối</button></td>' +
                     '</tr>'
                 ;
             }
@@ -128,6 +133,26 @@ function showListAddFriend() {
         },
         error: function () {
             document.getElementById('alert').innerHTML = "";
+        }
+    })
+    event.preventDefault();
+}
+
+function refuseFriend(idFriend) {
+    let idAcc = window.sessionStorage.getItem('ID_KEY');
+    $.ajax({
+        url: 'http://localhost:8080/user/refuse/' + idAcc + '/' + idFriend,
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': window.sessionStorage.getItem('TOKEN_KEY')
+        },
+        success: function () {
+            showListAddFriend();
+        },
+        error: function () {
+            showListAddFriend();
         }
     })
     event.preventDefault();
@@ -216,9 +241,13 @@ function showFriendDetail(idFriend) {
                             '<td>&nbsp;&nbsp;&nbsp;&nbsp;Trạng thái:' + data[i].privacy + '</td>' +
                             '</tr></table>';
                     }
-                    resulf += '<p>' + data[i].conten + '</p>' +
-                        '<p><img width="500px" height="auto" src=' + data[i].imageList[0].path + '/></p>' +
-                        '<p>' + data[i].likeList.length + ' <i class="fas fa-heart"></i> &nbsp;&nbsp;' + data[i].commentList.length + '  Bình luận</p>' +
+                    resulf +=
+                        '<p>' + data[i].conten + '</p>';
+                    if (data[i].imageList[0].path != "") {
+                        resulf += '<p><img width="500px" height="auto" src=' + data[i].imageList[0].path + '/></p>';
+                    }
+                    resulf +=
+                        '<p>' + data[i].likeList.length + ' <i class="fas fa-heart" style="color: lime"></i> &nbsp;&nbsp;' + data[i].commentList.length + '  Bình luận</p>' +
                         '<button type="button" class="btn btn-danger" onclick="createLike(' + data[i].id + ')"> Like </button>' +
                         '<input style="width: 350px;height: 38px" type="text"  id="comment' + data[i].id + '"/>' +
                         '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data[i].id + ')"> Bình luận </button>';
@@ -274,13 +303,19 @@ function searchFriend() {
         type: "POST",
         url: 'http://localhost:8080/user/searchfriend',
         success: function (data) {
+            console.log(data)
             let result = ""
-            result +=
-                '<table><tr>' +
-                '<td><img width="50px" height="50px" src=' + data.avatar.path + '/></td>' +
-                '<td><p>' + data.fullName + '</p></td>' +
-                '<td><button type="button"  onclick="addFriend(' + data.id + ')"> <i class="fas fa-user-plus"></i> </button></td>' +
-                '</tr></table>';
+            if (data.id == window.sessionStorage.getItem('ID_KEY')) {
+                result += '<img src="https://i-ione.vnecdn.net/2018/03/22/ezgifcomresize1-1521716616.gif" width="190px" height="auto">';
+            } else {
+                result +=
+                    '<table><tr>' +
+                    '<td><img width="50px" height="50px" src=' + data.avatar.path + '/></td>' +
+                    '<td><p>' + data.fullName + '</p></td>' +
+                    '<td><button type="button"  onclick="addFriend(' + data.id + ')"> <i class="fas fa-user-plus"></i> </button></td>' +
+                    '</tr></table>';
+
+            }
             document.getElementById('refriend').innerHTML = result;
         },
         error: function () {
@@ -350,9 +385,13 @@ function showPost(data) {
                     '<td>&nbsp;&nbsp;&nbsp;&nbsp;Trạng thái:' + data.content[i].privacy + '</td>' +
                     '</tr></table>';
             }
-            resulf += '<p>' + data.content[i].conten + '</p>' +
-                '<p><img width="500px" height="auto" src=' + data.content[i].imageList[0].path + '/></p>' +
-                '<p>' + data.content[i].likeList.length + ' <i class="fas fa-heart"></i>&nbsp;&nbsp;' + data.content[i].commentList.length + ' Bình luận</p>' +
+            resulf +=
+                '<p>' + data.content[i].conten + '</p>';
+            if (data.content[i].imageList[0].path != "") {
+                resulf += '<p><img width="500px" height="auto" src=' + data.content[i].imageList[0].path + '/></p>';
+            }
+            resulf +=
+                '<p>' + data.content[i].likeList.length + ' <i class="fas fa-heart" style="color: lime"></i>&nbsp;&nbsp;' + data.content[i].commentList.length + ' Bình luận</p>' +
                 '<button type="button" class="btn btn-danger" onclick="createLike(' + data.content[i].id + ')"> Like </button>' +
                 '<input style="width: 350px;height: 38px" type="text"  id="comment' + data.content[i].id + '"/>' +
                 '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data.content[i].id + ')"> Bình luận </button>';
@@ -450,9 +489,12 @@ function showRePost(idPost) {
             }
 
             result +=
-                '<p>' + data.conten + '</p>' +
-                '<p><img width="500px" height="auto" src=' + data.imageList[0].path + '/></p>' +
-                '<p>' + data.likeList.length + ' <i class="fas fa-heart"></i> &nbsp;&nbsp;' + data.commentList.length + '  Bình luận</p>' +
+                '<p>' + data.conten + '</p>';
+            if (data.imageList[0].path != "") {
+                result += '<p><img width="500px" height="auto" src=' + data.imageList[0].path + '/></p>';
+            }
+            result +=
+                '<p>' + data.likeList.length + ' <i class="fas fa-heart" style="color: lime"></i> &nbsp;&nbsp;' + data.commentList.length + '  Bình luận</p>' +
                 '<button type="button" class="btn btn-danger" onclick="createLike(' + data.id + ')"> Like </button>' +
                 '<input style="width: 350px;height: 38px" type="text" id="comment' + data.id + '"/>' +
                 '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data.id + ')"> Bình luận </button>';
@@ -473,6 +515,9 @@ function showRePost(idPost) {
 function createCm(idPost) {
     let idAcc = window.sessionStorage.getItem('ID_KEY');
     let contentNew = document.getElementById('comment' + idPost).value;
+    if (contentNew == "") {
+        return;
+    }
     let comment = {content: contentNew};
     $.ajax({
         url: 'http://localhost:8080/user/comment/' + idAcc + '/' + idPost,
@@ -495,6 +540,9 @@ function createCm(idPost) {
 function post() {
     let idPost = $('#idPost').val();
     let content = $('#content').val();
+    if (content == "") {
+        return;
+    }
     let privacy = $('#privacy').val();
     let timePost = new Date();
     let img = $('#image').val();

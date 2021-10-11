@@ -70,33 +70,30 @@
         </div>
       </div>
       <div class="card-body">
-          <div class="input-group form-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input id="email" type="text" class="form-control" placeholder="email">
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+          </div>
+          <input id="email" type="text" class="form-control" placeholder="email">
 
+        </div>
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-key"></i></span>
           </div>
-          <div class="input-group form-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-key"></i></span>
-            </div>
-            <input id="password" type="password" class="form-control" placeholder="password">
-          </div>
-          <div class="row align-items-center remember">
-            <input type="checkbox">Remember Me
-          </div>
-          <div class="form-group">
-            <button onclick="login()" class="btn float-right login_btn">Login</button>
-          </div>
+          <input id="password" type="password" class="form-control" placeholder="password">
+        </div>
+        <div class="row align-items-center remember">
+          <input type="checkbox">Remember Me
+        </div>
+        <div class="form-group">
+          <button onclick="login()" class="btn float-right login_btn">Login</button>
+        </div>
 
       </div>
       <div class="card-footer">
         <div class="d-flex justify-content-center links">
-          Don't have an account?<a href="#">Sign Up</a>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a href="#">Forgot your password?</a>
+          Don't have an account?<a href="signUp.html">Sign Up</a>
         </div>
       </div>
     </div>
@@ -121,6 +118,9 @@
           window.sessionStorage.setItem('FULLNAME_KEY',data.fullName);
           window.sessionStorage.setItem('AVATAR_KEY',data.avatar.path);
           window.location.href = 'home.html'
+      },
+      error: function (){
+        alert("wrong account or not registered!")
       }
     });
   }
