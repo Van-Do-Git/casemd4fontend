@@ -503,9 +503,9 @@ function showRePost(idPost) {
                 '<button type="button" class="btn btn-outline-success" onclick="createCm(' + data.id + ')"> Bình luận </button>';
             for (let j = 0; j < data.commentList.length; j++) {
                 if (data.commentList[j].account.id == window.sessionStorage.getItem('ID_KEY')) {
-                    result += '<p>' + data.commentList[j].account.fullName + '<button type="button" class="btn btn-outline-info" onclick="deleteComment(' + data.commentList[j].id + ',' + data.id + ')"> <i class="fas fa-trash"></i> </button></p>';
+                    result += '<p style="color: blue;font-size: 15px">' + data.commentList[j].account.fullName + '<button type="button" class="btn btn-outline-info" onclick="deleteComment(' + data.commentList[j].id + ',' + data.id + ')"> <i class="fas fa-trash"></i> </button></p>';
                 } else {
-                    result += '<p>' + data.commentList[j].account.fullName + '</p>';
+                    result += '<p style="color: blue;font-size: 15px">' + data.commentList[j].account.fullName + '</p>';
 
                 }
                 result += '<p>' + data.commentList[j].content + '</p>';
