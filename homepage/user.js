@@ -410,7 +410,7 @@ function showPost(data) {
             resulf += '</div><hr><br>';
         }
         if (!data.last) {
-            resulf += '<button type="button"  id="continueshow" onclick="continuePost()"> Xem Thêm </button>';
+            resulf += '<button type="button" class="btn btn-outline-primary"  id="continueshow" onclick="continuePost()"> Xem Thêm </button>';
         }
     }
 
