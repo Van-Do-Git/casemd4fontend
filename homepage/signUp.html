@@ -151,10 +151,8 @@
             data: JSON.stringify(account),
             contentType: 'application/json; charset=utf8',
             //xử lý khi thành công
-            success: function (data, status) {
-                if (data == "Ok") {
-                    window.location.assign("../index.html")
-                }
+            success: function (data) {
+                alert(data)
             },
             error: function (err) {
                 document.getElementById('email').value = 'Email is format fail!';
